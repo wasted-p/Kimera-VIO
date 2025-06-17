@@ -1,0 +1,3 @@
+/home/thurdparty/Code/kimera/test/build/CMakeFiles/test_kimera.dir
+/home/thurdparty/Code/kimera/test/build/CMakeFiles/edit_cache.dir
+/home/thurdparty/Code/kimera/test/build/CMakeFiles/rebuild_cache.dir

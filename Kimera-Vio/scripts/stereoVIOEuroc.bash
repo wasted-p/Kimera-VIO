@@ -4,7 +4,7 @@
 
 # Specify path of the EuRoC dataset.
 # The path can be absolute, or relative to this file location.
-DATASET_PATH="/path/to/euroc/dataset"
+DATASET_PATH="/home/thurdparty/Code/kimera/datasets/EuRoC"
 
 # Specify: 0 to run on EuRoC data, 1 to run on Kitti (not supported)
 DATASET_TYPE=0
@@ -42,33 +42,44 @@ if [ $# -eq 0 ]; then
 else
   # Parse all the options.
   while [ -n "$1" ]; do # while loop starts
-      case "$1" in
-        # Option -p, provides path to dataset.
-      -p) DATASET_PATH=$2
-          echo "Using dataset at path: $DATASET_PATH"
-          shift ;;
-        # Option -d, set dataset type
-      -d) DATASET_TYPE=$2
-          echo "Using dataset type: $DATASET_TYPE"
-          echo "0 is for euroc and 1 is for kitti"
-          shift ;;
-      -lcd) USE_LCD=1
-           echo "Run VIO with LoopClosureDetector!" ;;
-      -log) LOG_OUTPUT=1
-           echo "Logging output!";;
-      --)
-          shift # The double dash which separates options from parameters
-          break
-          ;; # Exit the loop using break command
-      *) echo "Option $1 not recognized" ;;
-      esac
+    case "$1" in
+    # Option -p, provides path to dataset.
+    -p)
+      DATASET_PATH=$2
+      echo "Using dataset at path: $DATASET_PATH"
       shift
+      ;;
+      # Option -d, set dataset type
+    -d)
+      DATASET_TYPE=$2
+      echo "Using dataset type: $DATASET_TYPE"
+      echo "0 is for euroc and 1 is for kitti"
+      shift
+      ;;
+    -lcd)
+      USE_LCD=1
+      echo "Run VIO with LoopClosureDetector!"
+      ;;
+    -log)
+      LOG_OUTPUT=1
+      echo "Logging output!"
+      ;;
+    --)
+      shift # The double dash which separates options from parameters
+      break
+      ;; # Exit the loop using break command
+    *) echo "Option $1 not recognized" ;;
+    esac
+    shift
   done
 fi
 
 # Change directory to parent path, in order to make this script
 # independent of where we call it from.
-parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+parent_path=$(
+  cd "$(dirname "${BASH_SOURCE[0]}")"
+  pwd -P
+)
 cd "$parent_path"
 
 echo """ Launching:
@@ -113,4 +124,3 @@ $BUILD_PATH/stereoVIOEuroc \
 #export PARAMS_PATH=../params/Euroc
 #export DATASET_PATH=/home/tonirv/datasets/EuRoC/V1_01_easy
 #gdb --args ../build/stereoVIOEuroc --flagfile="$PARAMS_PATH/flags/stereoVIOEuroc.flags" --flagfile="$PARAMS_PATH/flags/Mesher.flags" --flagfile="$PARAMS_PATH/flags/VioBackend.flags" --flagfile="$PARAMS_PATH/flags/RegularVioBackend.flags" --flagfile="$PARAMS_PATH/flags/Visualizer3D.flags" --logtostderr=1 --colorlogtostderr=1 --log_prefix=0 --dataset_path="$DATASET_PATH" --params_folder_path="$PARAMS_PATH" --initial_k=50 --final_k=2000 --vocabulary_path="../vocabulary/ORBvoc.yml" --use_lcd="0" --v=0 --vmodule=VioBackend=0 --dataset_type="0" --log_output="0" --output_path="../output_logs/"
-
